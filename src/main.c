@@ -3,7 +3,9 @@
 
 int main()
 {
-    RbTree* tree = RbTree_Create(10);
+    RbTree* tree;
+    RbTree_Print(tree);
+    tree = RbTree_Insert(tree, 5);
     RbTree_Print(tree);
     tree = RbTree_Insert(tree, 5);
     RbTree_Print(tree);

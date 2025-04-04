@@ -112,8 +112,6 @@ RbTree* RbTree_Insert(RbTree* root, int value)
 
 void RbTree_Print(RbTree* root)
 {
-    assert(root != nullptr);
-
     for (RbTree* node = RbTree_FallLeft(root); node != nullptr; node = RbTree_Next(node))
     {
         printf("%d ", node->value);
@@ -142,6 +140,7 @@ static bool RbTree_IsLeaf(RbTree* node)
 
 static bool RbTree_IsRoot(RbTree* node)
 {
+    assert(node != nullptr);
     return node->parent == nullptr;
 }
 
