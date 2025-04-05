@@ -197,7 +197,10 @@ RbTree* RbTree_Remove(RbTree* root, int value)
 
 void RbTree_Print(RbTree* root)
 {
-    assert(root != nullptr);
+    if (root == nullptr)
+    {
+        return;
+    }
 
     for (RbTree* node = RbTree_FallLeft(root); node != nullptr; node = RbTree_Next(node))
     {
