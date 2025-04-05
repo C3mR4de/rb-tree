@@ -33,4 +33,17 @@ int main()
     RbTree_Print(tree);
     tree = RbTree_Remove(tree, 10);
     RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 5);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 3);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 4);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 15);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 20);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 16);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 18);
 }

@@ -181,9 +181,15 @@ RbTree* RbTree_Remove(RbTree* root, int value)
 
         RbTree* node_parent = node->parent;
         RbTree** self_parent = RbTree_SelfFromParent(node);
-        *self_parent = nullptr;
         free(node);
-        return RbTree_RiseToRoot(node_parent);
+
+        if (self_parent != nullptr)
+        {
+            *self_parent = nullptr;
+            return RbTree_RiseToRoot(node_parent);
+        }
+
+        return nullptr;
     }
 
     return root;
