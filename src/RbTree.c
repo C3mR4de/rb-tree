@@ -22,7 +22,7 @@ static RbTree* RbTree_FallLeft (RbTree* node);
 static RbTree* RbTree_FallRight(RbTree* node);
 
 static RbTree* RbTree_RiseLeft  (RbTree* node);
-static RbTree* RbTree_RiseRight (RbTree* node);
+//static RbTree* RbTree_RiseRight (RbTree* node);
 static RbTree* RbTree_RiseToRoot(RbTree* node);
 
 static RbTree** RbTree_SelfFromLeft  (RbTree* node);
@@ -42,9 +42,9 @@ static bool RbTree_IsRight(RbTree* node);
 static RbTree* RbTree_Next(RbTree* node);
 
 static void RbTree_SwapPointers      (RbTree** lhs, RbTree** rhs);
-static void RbTree_SwapLeftPointers  (RbTree** lhs, RbTree** rhs);
-static void RbTree_SwapRightPointers (RbTree** lhs, RbTree** rhs);
-static void RbTree_SwapParentPointers(RbTree** lhs, RbTree** rhs);
+// static void RbTree_SwapLeftPointers  (RbTree** lhs, RbTree** rhs);
+// static void RbTree_SwapRightPointers (RbTree** lhs, RbTree** rhs);
+// static void RbTree_SwapParentPointers(RbTree** lhs, RbTree** rhs);
 static void RbTree_SwapNodesInTree   (RbTree** lhs, RbTree** rhs);
 
 RbTree* RbTree_Create(int value)

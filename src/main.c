@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "include/RbTree.h"
 
 int main()
@@ -62,4 +64,38 @@ int main()
     RbTree_Print(tree2);
     tree2 = RbTree_Remove(tree2, -10);
     RbTree_Print(tree2);
+
+    srand(time(nullptr));
+
+    const size_t test_array_size = rand() % 20;
+    int* const test_array = malloc(test_array_size * sizeof(int));
+
+    for (size_t i = 0; i < test_array_size; ++i)
+    {
+        test_array[i] = rand() % 101 - 50;
+    }
+
+    RbTree* test_tree = nullptr;
+
+    for (size_t i = 0; i < test_array_size; ++i)
+    {
+        test_tree = RbTree_Insert(test_tree, test_array[i]);
+        test_tree = RbTree_Insert(test_tree, test_array[i]);
+        RbTree_Print(test_tree);
+    }
+
+    for (size_t i = test_array_size - 1; i > 0; --i)
+    {
+        const volatile size_t rand_index = rand() % test_array_size;
+        const int temp = test_array[i];
+        test_array[i] = test_array[rand_index % (i + 1)];
+        test_array[rand_index % (i + 1)] = temp;
+    }
+
+    for (size_t i = 0; i < test_array_size; ++i)
+    {
+        test_tree = RbTree_Remove(test_tree, test_array[i]);
+        test_tree = RbTree_Remove(test_tree, test_array[i]);
+        RbTree_Print(test_tree);
+    }
 }
