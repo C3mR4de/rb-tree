@@ -25,7 +25,12 @@ int main()
     RbTree_Print(tree);
     tree = RbTree_Insert(tree, 17);
     RbTree_Print(tree);
-    tree = RbTree_Remove(tree, 3);
+    tree = RbTree_Remove(tree, 1);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 30);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 17);
+    RbTree_Print(tree);
+    tree = RbTree_Remove(tree, 10);
     RbTree_Print(tree);
 }
-
