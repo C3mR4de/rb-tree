@@ -67,12 +67,15 @@ int main()
 
     srand(time(nullptr));
 
-    const size_t test_array_size = rand() % 20;
+    constexpr size_t max_array_size = 200;
+    constexpr size_t max_value = 1000;
+
+    const size_t test_array_size = rand() % max_array_size + 1;
     int* const test_array = malloc(test_array_size * sizeof(int));
 
     for (size_t i = 0; i < test_array_size; ++i)
     {
-        test_array[i] = rand() % 101 - 50;
+        test_array[i] = rand() % (max_value + 1) - (max_value / 2);
     }
 
     RbTree* test_tree = nullptr;
@@ -86,7 +89,7 @@ int main()
 
     for (size_t i = test_array_size - 1; i > 0; --i)
     {
-        const volatile size_t rand_index = rand() % test_array_size;
+        const volatile size_t rand_index = rand();
         const int temp = test_array[i];
         test_array[i] = test_array[rand_index % (i + 1)];
         test_array[rand_index % (i + 1)] = temp;
@@ -98,4 +101,6 @@ int main()
         test_tree = RbTree_Remove(test_tree, test_array[i]);
         RbTree_Print(test_tree);
     }
+
+    free(test_array);
 }
