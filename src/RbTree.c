@@ -195,6 +195,14 @@ RbTree* RbTree_Remove(RbTree* root, int value)
     return root;
 }
 
+void RbTree_Clear(RbTree* root)
+{
+    while (root != nullptr)
+    {
+        root = RbTree_Remove(root, root->value);
+    }
+}
+
 void RbTree_Print(RbTree* root)
 {
     if (root == nullptr)
