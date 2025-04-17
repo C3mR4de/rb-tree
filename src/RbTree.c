@@ -34,6 +34,7 @@ static bool RbTree_HasRight    (RbTree* node);
 static bool RbTree_HasOnlyLeft (RbTree* node);
 static bool RbTree_HasOnlyRight(RbTree* node);
 
+static bool RbTree_Exists (RbTree* node);
 static bool RbTree_IsLeaf (RbTree* node);
 static bool RbTree_IsRoot (RbTree* node);
 static bool RbTree_IsLeft (RbTree* node);
@@ -51,7 +52,7 @@ RbTree* RbTree_Create(int value)
 {
     RbTree* root = (RbTree*)malloc(sizeof(RbTree));
 
-    if (root != nullptr)
+    if (RbTree_Exists(root))
     {
         *root = (RbTree){nullptr, nullptr, nullptr, value, RED};
     }
@@ -61,12 +62,12 @@ RbTree* RbTree_Create(int value)
 
 RbTree* RbTree_Search(RbTree* root, int value)
 {
-    if (root == nullptr)
+    if (!RbTree_Exists(root))
     {
         return nullptr;
     }
 
-    while (root != nullptr)
+    while (RbTree_Exists(root))
     {
         if (value < root->value)
         {
@@ -87,7 +88,7 @@ RbTree* RbTree_Search(RbTree* root, int value)
 
 RbTree* RbTree_Insert(RbTree* root, int value)
 {
-    if (root == nullptr)
+    if (!RbTree_Exists(root))
     {
         return RbTree_Create(value);
     }
@@ -135,7 +136,7 @@ RbTree* RbTree_Insert(RbTree* root, int value)
 
 RbTree* RbTree_Remove(RbTree* root, int value)
 {
-    if (root == nullptr)
+    if (!RbTree_Exists(root))
     {
         return nullptr;
     }
@@ -183,7 +184,7 @@ RbTree* RbTree_Remove(RbTree* root, int value)
         RbTree** self_parent = RbTree_SelfFromParent(node);
         free(node);
 
-        if (self_parent != nullptr)
+        if (RbTree_Exists(self_parent))
         {
             *self_parent = nullptr;
             return RbTree_RiseToRoot(node_parent);
@@ -197,7 +198,7 @@ RbTree* RbTree_Remove(RbTree* root, int value)
 
 void RbTree_Clear(RbTree* root)
 {
-    while (root != nullptr)
+    while (RbTree_Exists(root))
     {
         root = RbTree_Remove(root, root->value);
     }
@@ -205,12 +206,12 @@ void RbTree_Clear(RbTree* root)
 
 void RbTree_Print(RbTree* root)
 {
-    if (root == nullptr)
+    if (!RbTree_Exists(root))
     {
         return;
     }
 
-    for (RbTree* node = RbTree_FallLeft(root); node != nullptr; node = RbTree_Next(node))
+    for (RbTree* node = RbTree_FallLeft(root); RbTree_Exists(node); node = RbTree_Next(node))
     {
         printf("%d ", node->value);
     }
@@ -220,7 +221,7 @@ void RbTree_Print(RbTree* root)
 
 static RbTree* RbTree_FallLeft(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     while (RbTree_HasLeft(node))
     {
@@ -232,7 +233,7 @@ static RbTree* RbTree_FallLeft(RbTree* node)
 
 static RbTree* RbTree_FallRight(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     while (RbTree_HasRight(node))
     {
@@ -244,7 +245,7 @@ static RbTree* RbTree_FallRight(RbTree* node)
 
 static RbTree* RbTree_RiseLeft(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     while (!RbTree_IsRoot(node) && RbTree_IsRight(node))
     {
@@ -256,7 +257,7 @@ static RbTree* RbTree_RiseLeft(RbTree* node)
 
 static RbTree* RbTree_RiseRight(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     while (!RbTree_IsRoot(node) && RbTree_IsLeft(node))
     {
@@ -268,7 +269,7 @@ static RbTree* RbTree_RiseRight(RbTree* node)
 
 static RbTree* RbTree_RiseToRoot(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     while (!RbTree_IsRoot(node))
     {
@@ -280,7 +281,7 @@ static RbTree* RbTree_RiseToRoot(RbTree* node)
 
 static RbTree** RbTree_SelfFromLeft(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     if (!RbTree_HasLeft(node))
     {
@@ -292,7 +293,7 @@ static RbTree** RbTree_SelfFromLeft(RbTree* node)
 
 static RbTree** RbTree_SelfFromRight(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     if (!RbTree_HasRight(node))
     {
@@ -304,7 +305,7 @@ static RbTree** RbTree_SelfFromRight(RbTree* node)
 
 static RbTree** RbTree_SelfFromParent(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
 
     if (RbTree_IsRoot(node))
     {
@@ -316,65 +317,70 @@ static RbTree** RbTree_SelfFromParent(RbTree* node)
 
 static bool RbTree_HasLeft(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return node->left != nullptr;
 }
 
 static bool RbTree_HasRight(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return node->right != nullptr;
 }
 
 static bool RbTree_HasOnlyLeft(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return RbTree_HasLeft(node) && !RbTree_HasRight(node);
 }
 
 static bool RbTree_HasOnlyRight(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return !RbTree_HasLeft(node) && RbTree_HasRight(node);
+}
+
+static bool RbTree_Exists(RbTree* node)
+{
+    return node != nullptr;
 }
 
 static bool RbTree_IsLeaf(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return !(RbTree_HasLeft(node) || RbTree_HasRight(node));
 }
 
 static bool RbTree_IsRoot(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return node->parent == nullptr;
 }
 
 static bool RbTree_IsLeft(RbTree* node)
 {
-    assert(node != nullptr);
-    assert(node->parent != nullptr);
+    assert(RbTree_Exists(node));
+    assert(RbTree_Exists(node->parent));
     return node == node->parent->left;
 }
 
 static bool RbTree_IsRight(RbTree* node)
 {
-    assert(node != nullptr);
-    assert(node->parent != nullptr);
+    assert(RbTree_Exists(node));
+    assert(RbTree_Exists(node->parent));
     return node == node->parent->right;
 }
 
 static RbTree* RbTree_Next(RbTree* node)
 {
-    assert(node != nullptr);
+    assert(RbTree_Exists(node));
     return RbTree_HasRight(node) ? RbTree_FallLeft(node->right) : RbTree_RiseLeft(node)->parent;
 }
 
 
 static void RbTree_SwapPointers(RbTree** lhs, RbTree** rhs)
 {
-    assert(lhs != nullptr);
-    assert(rhs != nullptr);
+    assert(RbTree_Exists(lhs));
+    assert(RbTree_Exists(rhs));
 
     RbTree* temp = *lhs;
     *lhs = *rhs;
@@ -484,10 +490,10 @@ static void RbTree_SwapParentPointers(RbTree** lhs, RbTree** rhs)
 
 static void RbTree_SwapNodesInTree(RbTree** lhs, RbTree** rhs)
 {
-    assert(lhs != nullptr);
-    assert(rhs != nullptr);
-    assert(*lhs != nullptr);
-    assert(*rhs != nullptr);
+    assert(RbTree_Exists(lhs));
+    assert(RbTree_Exists(rhs));
+    assert(RbTree_Exists(*lhs));
+    assert(RbTree_Exists(*rhs));
 
     /*
     RbTree_SwapLeftPointers(lhs, rhs);
