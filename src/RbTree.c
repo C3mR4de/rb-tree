@@ -147,7 +147,7 @@ RbTree* RbTree_Remove(RbTree* root, int value)
     {
         if (value < node->value)
         {
-            if (node->left == nullptr)
+            if (!RbTree_HasLeft(node))
             {
                 break;
             }
@@ -156,7 +156,7 @@ RbTree* RbTree_Remove(RbTree* root, int value)
         }
         else if (node->value < value)
         {
-            if (node->right == nullptr)
+            if (!RbTree_HasRight(node))
             {
                 break;
             }
