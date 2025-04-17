@@ -34,13 +34,14 @@ static bool RbTree_HasRight    (RbTree* node);
 static bool RbTree_HasOnlyLeft (RbTree* node);
 static bool RbTree_HasOnlyRight(RbTree* node);
 
-static bool RbTree_Exists (RbTree* node);
+static bool RbTree_Exists (const void* node);
 static bool RbTree_IsLeaf (RbTree* node);
 static bool RbTree_IsRoot (RbTree* node);
 static bool RbTree_IsLeft (RbTree* node);
 static bool RbTree_IsRight(RbTree* node);
 
 static RbTree* RbTree_Next(RbTree* node);
+static bool    RbTree_FindExact(RbTree* root, int value, RbTree** result);
 
 static void RbTree_SwapPointers      (RbTree** lhs, RbTree** rhs);
 // static void RbTree_SwapLeftPointers  (RbTree** lhs, RbTree** rhs);
@@ -93,38 +94,9 @@ RbTree* RbTree_Insert(RbTree* root, int value)
         return RbTree_Create(value);
     }
 
-    RbTree* node = root;
-    bool found = false;
+    RbTree* node = nullptr;
 
-    while (!found)
-    {
-        if (value < node->value)
-        {
-            if (!RbTree_HasLeft(node))
-            {
-                break;
-            }
-
-            node = node->left;
-        }
-        else if (node->value < value)
-        {
-            if (!RbTree_HasRight(node))
-            {
-                break;
-            }
-
-            node = node->right;
-        }
-        else
-        {
-            found = true;
-        }
-    }
-
-    assert(found == !(value < node->value || node->value < value));
-
-    if (!found)
+    if (!RbTree_FindExact(root, value, &node))
     {
         RbTree** temp = value < node->value ? &node->left : &node->right;
         *temp = malloc(sizeof(RbTree));
@@ -141,38 +113,9 @@ RbTree* RbTree_Remove(RbTree* root, int value)
         return nullptr;
     }
 
-    RbTree* node = root;
-    bool found = false;
+    RbTree* node = nullptr;
 
-    while (!found)
-    {
-        if (value < node->value)
-        {
-            if (!RbTree_HasLeft(node))
-            {
-                break;
-            }
-
-            node = node->left;
-        }
-        else if (node->value < value)
-        {
-            if (!RbTree_HasRight(node))
-            {
-                break;
-            }
-
-            node = node->right;
-        }
-        else
-        {
-            found = true;
-        }
-    }
-
-    assert(found == !(value < node->value || node->value < value));
-
-    if (found)
+    if (RbTree_FindExact(root, value, &node))
     {
         while (!RbTree_IsLeaf(node))
         {
@@ -339,7 +282,7 @@ static bool RbTree_HasOnlyRight(RbTree* node)
     return !RbTree_HasLeft(node) && RbTree_HasRight(node);
 }
 
-static bool RbTree_Exists(RbTree* node)
+static bool RbTree_Exists(const void* node)
 {
     return node != nullptr;
 }
@@ -376,6 +319,41 @@ static RbTree* RbTree_Next(RbTree* node)
     return RbTree_HasRight(node) ? RbTree_FallLeft(node->right) : RbTree_RiseLeft(node)->parent;
 }
 
+static bool RbTree_FindExact(RbTree* root, int value, RbTree** result)
+{
+    RbTree* node = root;
+    bool found = false;
+
+    while (!found)
+    {
+        if (value < node->value)
+        {
+            if (!RbTree_HasLeft(node))
+            {
+                break;
+            }
+
+            node = node->left;
+        }
+        else if (node->value < value)
+        {
+            if (!RbTree_HasRight(node))
+            {
+                break;
+            }
+
+            node = node->right;
+        }
+        else
+        {
+            found = true;
+        }
+    }
+
+    assert(found == !(value < node->value || node->value < value));
+    *result = node;
+    return found;
+}
 
 static void RbTree_SwapPointers(RbTree** lhs, RbTree** rhs)
 {
