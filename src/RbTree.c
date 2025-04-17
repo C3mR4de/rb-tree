@@ -3,18 +3,18 @@
 #include <stdlib.h>
 #include <assert.h>
 
-enum Color
+enum Color: bool
 {
-    RED = 0,
+    RED = false,
     BLACK
 };
 
 struct RbTree
 {
-    int value;
     RbTree* left;
     RbTree* right;
     RbTree* parent;
+    int value;
     enum Color color;
 };
 
@@ -22,7 +22,7 @@ static RbTree* RbTree_FallLeft (RbTree* node);
 static RbTree* RbTree_FallRight(RbTree* node);
 
 static RbTree* RbTree_RiseLeft  (RbTree* node);
-//static RbTree* RbTree_RiseRight (RbTree* node);
+static RbTree* RbTree_RiseRight (RbTree* node);
 static RbTree* RbTree_RiseToRoot(RbTree* node);
 
 static RbTree** RbTree_SelfFromLeft  (RbTree* node);
@@ -53,7 +53,7 @@ RbTree* RbTree_Create(int value)
 
     if (root != nullptr)
     {
-        *root = (RbTree){value, nullptr, nullptr, nullptr, RED};
+        *root = (RbTree){nullptr, nullptr, nullptr, value, RED};
     }
 
     return root;
@@ -127,7 +127,7 @@ RbTree* RbTree_Insert(RbTree* root, int value)
     {
         RbTree** temp = value < node->value ? &node->left : &node->right;
         *temp = malloc(sizeof(RbTree));
-        **temp = (RbTree){value, nullptr, nullptr, node, RED};
+        **temp = (RbTree){nullptr, nullptr, node, value, RED};
     }
 
     return root;
